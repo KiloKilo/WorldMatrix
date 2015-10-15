@@ -59,13 +59,13 @@
 			isa = PBXGroup;
 			children = (
 				B18CAA791BCC044200B3FCE1 /* AppDelegate.swift */,
+				B18CAA901BCE3F2A00B3FCE1 /* Matrix.swift */,
+				B18CAA921BCE47AB00B3FCE1 /* WorldMatrixView.swift */,
+				B18CAA941BCEA0D100B3FCE1 /* WorldViewController.swift */,
 				B18CAA7D1BCC044200B3FCE1 /* Main.storyboard */,
 				B18CAA801BCC044200B3FCE1 /* Assets.xcassets */,
 				B18CAA821BCC044200B3FCE1 /* LaunchScreen.storyboard */,
 				B18CAA851BCC044200B3FCE1 /* Info.plist */,
-				B18CAA901BCE3F2A00B3FCE1 /* Matrix.swift */,
-				B18CAA921BCE47AB00B3FCE1 /* WorldMatrixView.swift */,
-				B18CAA941BCEA0D100B3FCE1 /* WorldViewController.swift */,
 			);
 			path = WorldMatrix;
 			sourceTree = "<group>";
