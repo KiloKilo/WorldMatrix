@@ -42,36 +42,6 @@ struct Matrix<T> {
         }
     }
 
-
-    func toString() -> String {
-        var output = ""
-
-        output = "["
-
-        for row in 0..<rows {
-
-//            output += "\n  ["
-            output += "\n"
-
-            for column in 0..<columns {
-
-                output += "\(grid[(row * columns) + column])"
-
-                guard column + 1 < columns || row + 1 < rows else { continue }
-                output += ", "
-
-            }
-
-//            output += "]"
-
-//            guard row + 1 < rows else { continue }
-//            output += ", "
-        }
-
-        output += "\n]"
-
-        return output
-    }
 }
 
 extension Matrix: CollectionType {
@@ -91,7 +61,6 @@ extension Matrix: CollectionType {
     subscript (_i: Index) -> (row:Int, column:Int, element:T) {
         get {
             let rowColumn = getRowColumnForIndex(_i)
-
             return (rowColumn.row, rowColumn.column, grid[_i])
         }
     }

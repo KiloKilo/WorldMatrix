@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B159B4431BCFF47F00578B16 /* WorldMatrixGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B159B4421BCFF47F00578B16 /* WorldMatrixGenerator.swift */; settings = {ASSET_TAGS = (); }; };
 		B18CAA7A1BCC044200B3FCE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18CAA791BCC044200B3FCE1 /* AppDelegate.swift */; };
 		B18CAA7F1BCC044200B3FCE1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B18CAA7D1BCC044200B3FCE1 /* Main.storyboard */; };
 		B18CAA811BCC044200B3FCE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B18CAA801BCC044200B3FCE1 /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B159B4421BCFF47F00578B16 /* WorldMatrixGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldMatrixGenerator.swift; sourceTree = "<group>"; };
 		B18CAA761BCC044200B3FCE1 /* WorldMatrix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorldMatrix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B18CAA791BCC044200B3FCE1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B18CAA7E1BCC044200B3FCE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -59,9 +61,10 @@
 			isa = PBXGroup;
 			children = (
 				B18CAA791BCC044200B3FCE1 /* AppDelegate.swift */,
-				B18CAA901BCE3F2A00B3FCE1 /* Matrix.swift */,
-				B18CAA921BCE47AB00B3FCE1 /* WorldMatrixView.swift */,
 				B18CAA941BCEA0D100B3FCE1 /* WorldViewController.swift */,
+				B18CAA901BCE3F2A00B3FCE1 /* Matrix.swift */,
+				B159B4421BCFF47F00578B16 /* WorldMatrixGenerator.swift */,
+				B18CAA921BCE47AB00B3FCE1 /* WorldMatrixView.swift */,
 				B18CAA7D1BCC044200B3FCE1 /* Main.storyboard */,
 				B18CAA801BCC044200B3FCE1 /* Assets.xcassets */,
 				B18CAA821BCC044200B3FCE1 /* LaunchScreen.storyboard */,
@@ -146,6 +149,7 @@
 				B18CAA931BCE47AB00B3FCE1 /* WorldMatrixView.swift in Sources */,
 				B18CAA951BCEA0D100B3FCE1 /* WorldViewController.swift in Sources */,
 				B18CAA911BCE3F2A00B3FCE1 /* Matrix.swift in Sources */,
+				B159B4431BCFF47F00578B16 /* WorldMatrixGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
