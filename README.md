@@ -1,4 +1,7 @@
 # WorldMatrix
+
+[![Cocoapods Version](https://img.shields.io/cocoapods/v/WorldMatrix.svg)](https://github.com/KiloKilo/WorldMatrix)
+[![Cocoapods Platform](https://img.shields.io/cocoapods/p/WorldMatrix.svg)](https://github.com/KiloKilo/WorldMatrix)
 [![Analytics](https://ga-beacon.appspot.com/UA-63588420-2/WorldMatrix)](https://github.com/KiloKilo/WorldMatrix)
 
 `WorldMatrix` is an iOS library writen in Swift 2 which allows you to draw a map with dots.
