@@ -177,9 +177,9 @@ class WorldMatrixView: UIView {
             self.layer.cornerRadius = CGRectGetHeight(self.frame) / 2.0
 
             switch characteristic {
-            case .InlandWater, .Ocean:
+            case .Ocean:
                 self.backgroundColor = UIColor.clearColor()
-            case .Land:
+            case .Land, .InlandWater:
                 self.backgroundColor = UIColor.whiteColor()
             case .Marker:
                 self.backgroundColor = UIColor.blackColor()
