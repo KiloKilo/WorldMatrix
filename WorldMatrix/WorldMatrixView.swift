@@ -9,14 +9,14 @@
 import UIKit
 import MapKit
 
-enum WorldCharacteristic: CustomStringConvertible {
+public enum WorldCharacteristic: CustomStringConvertible {
     case Land
     case Ocean
     case InlandWater
     case Marker
     case Unknown
 
-    var description: String {
+    public var description: String {
         switch self {
         case Land:
             return "🔶"
@@ -34,7 +34,7 @@ enum WorldCharacteristic: CustomStringConvertible {
 
 typealias BoundingBox = (topLeft: CLLocationCoordinate2D, bottomRight: CLLocationCoordinate2D)
 
-enum MapCutting {
+public enum MapCutting {
     case World //85.0,-180.0,-85.0,180.0
     case Europe //82.7,-28.0,33.9,74.1
     case Africa //37.96,-26.59,-37.53,60.56
@@ -66,9 +66,9 @@ enum MapCutting {
 }
 
 
-class WorldMatrixView: UIView {
+public class WorldMatrixView: UIView {
 
-    var mapMatrix: Matrix<WorldCharacteristic>? {
+    public var mapMatrix: Matrix<WorldCharacteristic>? {
         didSet {
             createMatrixViews()
             setNeedsLayout()
@@ -76,8 +76,8 @@ class WorldMatrixView: UIView {
     }
     private var viewMatrix: Matrix<WorldDotView>?
 
-    var matrixGap:CGFloat = 1.0
-    var mapCutting:MapCutting?
+    public var matrixGap:CGFloat = 1.0
+    public var mapCutting:MapCutting?
 
 
     private func createMatrixViews() {
@@ -104,7 +104,7 @@ class WorldMatrixView: UIView {
 
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
 
         guard let viewMatrix = viewMatrix else { return }

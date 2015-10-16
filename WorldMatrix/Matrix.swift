@@ -6,18 +6,18 @@
 //  Copyright © 2015 KiloKilo GmbH. All rights reserved.
 //
 
-struct Matrix<T> {
+public struct Matrix<T> {
 
     let rows: Int, columns: Int
     var grid: [T]
 
-    init(rows: Int, columns: Int, repeatedValue: T) {
+    public init(rows: Int, columns: Int, repeatedValue: T) {
         self.rows = rows
         self.columns = columns
         grid = Array<T>(count: rows * columns, repeatedValue: repeatedValue)
     }
 
-    init(columns:Int, array:Array<T>) {
+    public init(columns:Int, array:Array<T>) {
         grid = array
         self.columns = columns
         self.rows = grid.count / columns
@@ -26,12 +26,12 @@ struct Matrix<T> {
     }
 
 
-    func indexIsValidForRow(row: Int, column: Int) -> Bool {
+    public func indexIsValidForRow(row: Int, column: Int) -> Bool {
         return row >= 0 && row < rows && column >= 0 && column < columns
     }
 
 
-    subscript(row: Int, column: Int) -> T {
+    public subscript(row: Int, column: Int) -> T {
         get {
             assert(indexIsValidForRow(row, column: column), "Index out of range")
             return grid[(row * columns) + column]
@@ -45,20 +45,20 @@ struct Matrix<T> {
 }
 
 extension Matrix: CollectionType {
-    typealias Index = Int
+    public typealias Index = Int
 
-    var startIndex: Index {
+    public var startIndex: Index {
         get {
             return 0
         }
     }
-    var endIndex: Index {
+    public var endIndex: Index {
         get {
             return grid.count
         }
     }
 
-    subscript (_i: Index) -> (row:Int, column:Int, element:T) {
+    public subscript (_i: Index) -> (row:Int, column:Int, element:T) {
         get {
             let rowColumn = getRowColumnForIndex(_i)
             return (rowColumn.row, rowColumn.column, grid[_i])

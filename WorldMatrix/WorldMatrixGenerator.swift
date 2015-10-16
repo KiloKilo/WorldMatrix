@@ -9,9 +9,9 @@
 import UIKit
 import MapKit
 
-class WorldMatrixGenerator: NSObject {
+public class WorldMatrixGenerator: NSObject {
 
-    var columns:Int = 100 {
+    public var columns:Int = 100 {
         didSet {
             computeValues()
         }
@@ -19,7 +19,7 @@ class WorldMatrixGenerator: NSObject {
 
     private var rows:Int = 1
 
-    var mapCutting:MapCutting = .World {
+    public var mapCutting:MapCutting = .World {
         didSet {
             computeValues()
         }
@@ -45,7 +45,7 @@ class WorldMatrixGenerator: NSObject {
     let queue = NSOperationQueue()
 
 
-    override init() {
+    override public init() {
         super.init()
 
         computeValues()
@@ -66,7 +66,7 @@ class WorldMatrixGenerator: NSObject {
         mapMatrix = Matrix<WorldCharacteristic>(rows: rows, columns: columns, repeatedValue: .Unknown)
     }
 
-    func generate() {
+    public func generate() {
 
         queue.maxConcurrentOperationCount = 1
 
@@ -128,7 +128,7 @@ class WorldMatrixGenerator: NSObject {
 
     }
 
-    func export() {
+    public func export() {
         print("")
         print("var mapMatrix = []")
 
