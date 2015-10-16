@@ -38,7 +38,7 @@ enum MapCutting {
     case World //85.0,-180.0,-85.0,180.0
     case Europe //82.7,-28.0,33.9,74.1
     case Africa //37.96,-26.59,-37.53,60.56
-    case NorhAmerica //85.42,177.15,5.57,-4.05
+    case NorthAmerica //85.42,177.15,5.57,-4.05
     case SouthAmerica //13.08,-93.98,-56.55,-32.59
     case Australia //-9.22,112.92,-54.78,159.26
     case Custom(north:Double, east:Double, south:Double, west: Double)

@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let generator = WorldMatrixGenerator()
         generator.columns = 20
-        generator.mapCutting = .Africa
+        generator.mapCutting = .NorthAmerica
         generator.generate()
 
         return true
