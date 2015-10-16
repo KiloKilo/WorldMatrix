@@ -77,6 +77,17 @@ class WorldMatrixGenerator: NSObject {
 
         for (row, column, _) in mapMatrix! {
 
+            // it looks like we cannot make more than 50 requests per minutes
+            // so we wait until the time is up, and thereby the number of errors
+            if (row * column + column) % 51 == 1 {
+                let waitOperation = NSBlockOperation(block: { () -> Void in
+                    sleep(10)
+                })
+
+                queue.addOperation(waitOperation)
+            }
+
+
             let mapPoint = MKMapPointMake(topLeftPoint.x + (Double(column) * matrixFieldSize) + (matrixFieldSize/2.0), topLeftPoint.y + (Double(row) * matrixFieldSize) + (matrixFieldSize/2.0))
             let coordinate = MKCoordinateForMapPoint(mapPoint)
 
