@@ -42,6 +42,9 @@ class WorldMatrixGenerator: NSObject {
     private var mapMatrix: Matrix<WorldCharacteristic>?
 
 
+    let queue = NSOperationQueue()
+
+
     override init() {
         super.init()
 
@@ -59,66 +62,51 @@ class WorldMatrixGenerator: NSObject {
 
     func generate() {
 
-        var i = 0
+        queue.maxConcurrentOperationCount = 1
+
+        let exportOp = NSBlockOperation { () -> Void in
+            self.export()
+        }
+
+
         for (row, column, _) in mapMatrix! {
 
-            let delay = 1.5 * Double(i) * Double(NSEC_PER_SEC)
-            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-            dispatch_after(time, dispatch_get_main_queue()) {
-                self.reverseGeocodeLocationForRow(row, andColumn: column)
-            }
+            let mapPoint = MKMapPointMake(topLeftPoint.x + (Double(column) * matrixFieldSize) + (matrixFieldSize/2.0), topLeftPoint.y + (Double(row) * matrixFieldSize) + (matrixFieldSize/2.0))
+            let coordinate = MKCoordinateForMapPoint(mapPoint)
 
-            i++
+            let op = ReverseGeoCodeOperation(location: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude), completionHandler: { (placemarks, error) -> Void in
 
-        }
+                if column == 0 { print("") }
 
-        let d = 1.55 * Double(i) * Double(NSEC_PER_SEC)
-        let t = dispatch_time(DISPATCH_TIME_NOW, Int64(d))
-        dispatch_after(t, dispatch_get_main_queue()) {
-            self.export()
+                if let _ = error {
+                    self.mapMatrix![row, column] = .Unknown
+                    print("x", separator: "", terminator: "")
 
-        }
-    }
+                    // TODO: Redo the operation
 
-
-    // TODO: move to NSOperation
-    func reverseGeocodeLocationForRow(row:Int, andColumn column:Int) {
-        let mapPoint = MKMapPointMake(topLeftPoint.x + (Double(column) * matrixFieldSize) + (matrixFieldSize/2.0), topLeftPoint.y + (Double(row) * matrixFieldSize) + (matrixFieldSize/2.0))
-        let coordinate = MKCoordinateForMapPoint(mapPoint)
-
-
-        let geoCoder = CLGeocoder()
-        geoCoder.reverseGeocodeLocation(CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude), completionHandler: { (placemarks, error) -> Void in
-
-            if column == 0 { print("") }
-
-            if let _ = error {
-                self.mapMatrix![row, column] = .Unknown
-                print("x", separator: "", terminator: "")
-
-                let delay = 2 * Double(NSEC_PER_SEC)
-                let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-                dispatch_after(time, dispatch_get_main_queue()) {
-                    self.reverseGeocodeLocationForRow(row, andColumn: column)
+                    return
                 }
 
-                return
-            }
+                guard let placemarks = placemarks else { return }
 
-            guard let placemarks = placemarks else { return }
+                if placemarks[0].inlandWater != nil {
+                    self.mapMatrix![row, column] = .InlandWater
+                    print("-", separator: "", terminator: "")
+                } else if placemarks[0].ocean != nil {
+                    self.mapMatrix![row, column] = .Ocean
+                    print("~", separator: "", terminator: "")
+                } else {
+                    self.mapMatrix![row, column] = .Land
+                    print(".", separator: "", terminator: "")
+                }
+                
+            })
 
-            if placemarks[0].inlandWater != nil {
-                self.mapMatrix![row, column] = .InlandWater
-                print("-", separator: "", terminator: "")
-            } else if placemarks[0].ocean != nil {
-                self.mapMatrix![row, column] = .Ocean
-                print("~", separator: "", terminator: "")
-            } else {
-                self.mapMatrix![row, column] = .Land
-                print(".", separator: "", terminator: "")
-            }
+            exportOp.addDependency(op)
+            self.queue.addOperation(op)
+        }
 
-        })
+        queue.addOperation(exportOp)
 
     }
 
@@ -142,8 +130,47 @@ class WorldMatrixGenerator: NSObject {
             
         }
         
-        
-        //        print(self.mapMatrix!.toString())
+    }
+
+
+    class ReverseGeoCodeOperation: NSOperation {
+
+        let location:CLLocation
+        let completionHandler:CLGeocodeCompletionHandler
+
+        var isComplete: Bool = false
+
+
+        init(location: CLLocation, completionHandler: CLGeocodeCompletionHandler) {
+            self.location = location
+            self.completionHandler = completionHandler
+
+            super.init()
+
+            name = "ReverseGeoCodeOperation"
+        }
+
+        override func main() {
+            if self.cancelled {
+                return
+            }
+
+//            sleep(1) // Slow down the requests, otherwise we will get to much errors
+
+            let geoCoder = CLGeocoder()
+            geoCoder.reverseGeocodeLocation(self.location) { (placemarks, error) -> Void in
+                self.completionHandler(placemarks, error)
+                self.isComplete = true
+            }
+
+            while true {
+                sleep(1)
+                if self.isComplete {
+                    break
+                }
+            }
+        }
+
     }
     
     
