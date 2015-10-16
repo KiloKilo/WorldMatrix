@@ -51,7 +51,7 @@ enum MapCutting {
             return MapCutting.Custom(north: 82.7, east: -28.0, south: 33.9, west: 74.1).boundingCoordinates()
         case Africa:
             return MapCutting.Custom(north: 37.96, east: -26.59, south: -37.53, west: 60.56).boundingCoordinates()
-        case NorhAmerica:
+        case NorthAmerica:
             return MapCutting.Custom(north: 85.42, east: 177.15, south: 5.57, west: -4.05).boundingCoordinates()
         case SouthAmerica:
             return MapCutting.Custom(north: 13.08, east: -93.98, south: -56.55, west: -32.59).boundingCoordinates()
