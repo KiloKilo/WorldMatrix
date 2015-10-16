@@ -32,6 +32,40 @@ enum WorldCharacteristic: CustomStringConvertible {
     }
 }
 
+typealias BoundingBox = (topLeft: CLLocationCoordinate2D, bottomRight: CLLocationCoordinate2D)
+
+enum MapCutting {
+    case World //85.0,-180.0,-85.0,180.0
+    case Europe //82.7,-28.0,33.9,74.1
+    case Africa //37.96,-26.59,-37.53,60.56
+    case NorhAmerica //85.42,177.15,5.57,-4.05
+    case SouthAmerica //13.08,-93.98,-56.55,-32.59
+    case Australia //-9.22,112.92,-54.78,159.26
+    case Custom(north:Double, east:Double, south:Double, west: Double)
+
+    func boundingCoordinates() -> BoundingBox {
+        switch self {
+        case World:
+            return MapCutting.Custom(north: 85, east: -179.99, south: -85, west: 180).boundingCoordinates()
+        case Europe:
+            return MapCutting.Custom(north: 82.7, east: -28.0, south: 33.9, west: 74.1).boundingCoordinates()
+        case Africa:
+            return MapCutting.Custom(north: 37.96, east: -26.59, south: -37.53, west: 60.56).boundingCoordinates()
+        case NorhAmerica:
+            return MapCutting.Custom(north: 85.42, east: 177.15, south: 5.57, west: -4.05).boundingCoordinates()
+        case SouthAmerica:
+            return MapCutting.Custom(north: 13.08, east: -93.98, south: -56.55, west: -32.59).boundingCoordinates()
+        case Australia:
+            return MapCutting.Custom(north: -9.22, east: 112.92, south: -54.78, west: 159.26).boundingCoordinates()
+        case Custom(let north, let east, let south, let west):
+            return (CLLocationCoordinate2DMake(north, east), CLLocationCoordinate2DMake(south, west))
+        }
+
+    }
+
+}
+
+
 class WorldMatrixView: UIView {
 
     var mapMatrix: Matrix<WorldCharacteristic>? {
@@ -43,8 +77,7 @@ class WorldMatrixView: UIView {
     private var viewMatrix: Matrix<WorldDotView>?
 
     var matrixGap:CGFloat = 1.0
-    var topLeftCoordinate = CLLocationCoordinate2DMake(86, -179.999)
-    var bottomRightCoordinate = CLLocationCoordinate2DMake(-82, 180)
+    var mapCutting:MapCutting = .World
 
 
     private func createMatrixViews() {

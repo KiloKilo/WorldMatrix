@@ -19,18 +19,21 @@ class WorldMatrixGenerator: NSObject {
 
     private var rows:Int = 1
 
-    var topLeftCoordinate = CLLocationCoordinate2DMake(86, -179.999)
-    var bottomRightCoordinate = CLLocationCoordinate2DMake(-82, 180)
+    var mapCutting:MapCutting = .World {
+        didSet {
+            computeValues()
+        }
+    }
 
     private var topLeftPoint:MKMapPoint {
         get {
-            return MKMapPointForCoordinate(topLeftCoordinate)
+            return MKMapPointForCoordinate(mapCutting.boundingCoordinates().topLeft)
         }
     }
 
     private var bottomRightPoint:MKMapPoint {
         get {
-            return MKMapPointForCoordinate(bottomRightCoordinate)
+            return MKMapPointForCoordinate(mapCutting.boundingCoordinates().bottomRight)
         }
     }
 
@@ -53,7 +56,6 @@ class WorldMatrixGenerator: NSObject {
         rows = Int(Double(height) / matrixFieldSize)
         mapMatrix = Matrix<WorldCharacteristic>(rows: rows, columns: columns, repeatedValue: .Unknown)
     }
-
 
     func generate() {
 

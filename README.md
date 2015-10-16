@@ -17,13 +17,41 @@ pod 'WorldMatrix', '~> 1.0.0'
 ```
 
 ## Usage
+
+
 ```swift
-// worldArray is the generated array
+// worldArray can be generated with the generator (see `Generate a map)
 var worldArray:Array<WorldCharacteristic> = []
 
 let matrix = Matrix<WorldCharacteristic>(columns: 100, array: worldArray)
     worldMatrixView.mapMatrix = matrix
 
+```
+
+### Generate a map
+Add the generator to your `Podfile`
+
+```bash
+pod 'WorldMatrix/Generator', '~> 1.0.0'
+```
+
+Generate a Matrix with you desired cutting
+
+```swift
+import MapKit
+
+
+let generator = WorldMatrixGenerator()
+
+// Set the number of columns per rows (Default: 100)
+generator.columns = 20
+
+// Set your desired map cutting (Default: .World)
+// use .Custom(north, east, south, west) for a custom bounding
+generator.mapCutting = .Europe
+
+// Generates the world array
+generator.generate()
 ```
 
 ## Demo
