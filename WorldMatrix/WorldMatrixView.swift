@@ -41,24 +41,24 @@ enum MapCutting {
     case NorthAmerica //85.42,177.15,5.57,-4.05
     case SouthAmerica //13.08,-93.98,-56.55,-32.59
     case Australia //-9.22,112.92,-54.78,159.26
-    case Custom(north:Double, east:Double, south:Double, west: Double)
+    case Custom(north:Double, west:Double, south:Double, east:Double)
 
     func boundingCoordinates() -> BoundingBox {
         switch self {
         case World:
-            return MapCutting.Custom(north: 85, east: -179.99, south: -85, west: 180).boundingCoordinates()
+            return MapCutting.Custom(north: 85, west: -179.99, south: -85, east: 180).boundingCoordinates()
         case Europe:
-            return MapCutting.Custom(north: 82.7, east: -28.0, south: 33.9, west: 74.1).boundingCoordinates()
+            return MapCutting.Custom(north: 82.7, west: -28.0, south: 33.9, east: 74.1).boundingCoordinates()
         case Africa:
-            return MapCutting.Custom(north: 37.96, east: -26.59, south: -37.53, west: 60.56).boundingCoordinates()
+            return MapCutting.Custom(north: 37.96, west: -26.59, south: -37.53, east: 60.56).boundingCoordinates()
         case NorthAmerica:
-            return MapCutting.Custom(north: 85.42, east: 177.15, south: 5.57, west: -4.05).boundingCoordinates()
+            return MapCutting.Custom(north: 85.42, west: 177.15, south: 5.57, east: -4.05).boundingCoordinates()
         case SouthAmerica:
-            return MapCutting.Custom(north: 13.08, east: -93.98, south: -56.55, west: -32.59).boundingCoordinates()
+            return MapCutting.Custom(north: 13.08, west: -93.98, south: -56.55, east: -32.59).boundingCoordinates()
         case Australia:
-            return MapCutting.Custom(north: -9.22, east: 112.92, south: -54.78, west: 159.26).boundingCoordinates()
-        case Custom(let north, let east, let south, let west):
-            return (CLLocationCoordinate2DMake(north, east), CLLocationCoordinate2DMake(south, west))
+            return MapCutting.Custom(north: -9.22, west: 112.92, south: -54.78, east: 159.26).boundingCoordinates()
+        case Custom(let north, let west, let south, let east):
+            return (CLLocationCoordinate2DMake(north, west), CLLocationCoordinate2DMake(south, east))
         }
 
     }

@@ -38,9 +38,6 @@ pod 'WorldMatrix/Generator', '~> 1.0.0'
 Generate a Matrix with you desired cutting
 
 ```swift
-import MapKit
-
-
 let generator = WorldMatrixGenerator()
 
 // Set the number of columns per rows (Default: 100)

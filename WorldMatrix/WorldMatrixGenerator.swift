@@ -52,8 +52,14 @@ class WorldMatrixGenerator: NSObject {
     }
 
     private func computeValues() {
-        let width = bottomRightPoint.x - topLeftPoint.x
+
+        var width:Double = bottomRightPoint.x - topLeftPoint.x
         let height = bottomRightPoint.y - topLeftPoint.y
+
+        if topLeftPoint.x > bottomRightPoint.x {
+            width += MKMapPointForCoordinate(CLLocationCoordinate2DMake(mapCutting.boundingCoordinates().topLeft.latitude, 180)).x
+        }
+
 
         matrixFieldSize = Double(width) / Double(columns)
         rows = Int(Double(height) / matrixFieldSize)
@@ -83,6 +89,7 @@ class WorldMatrixGenerator: NSObject {
                     print("x", separator: "", terminator: "")
 
                     // TODO: Redo the operation
+                    sleep(10) //wait and try to minimize the errors
 
                     return
                 }
@@ -163,12 +170,8 @@ class WorldMatrixGenerator: NSObject {
                 self.isComplete = true
             }
 
-            while true {
-                sleep(1)
-                if self.isComplete {
-                    break
-                }
-            }
+            // yeah I know ... I'm sorry for that
+            while !self.isComplete { sleep(1) }
         }
 
     }

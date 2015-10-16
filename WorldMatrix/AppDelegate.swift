@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MapKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let generator = WorldMatrixGenerator()
         generator.columns = 20
-        generator.mapCutting = .NorthAmerica
+        generator.mapCutting = .SouthAmerica
         generator.generate()
 
         return true
