@@ -9,83 +9,31 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
+                  `WorldMatrix` is an iOS library writen in Swift 2 which allows you to draw a map with dots.
                    DESC
 
   s.homepage     = "https://github.com/KiloKilo/WorldMatrix"
-  # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
-
+  s.screenshots  = "https://raw.github.com/KiloKilo/WorldMatrix/master/screenshot.png"
 
   s.license      = { :type => "MIT", :file => "LICENSE" }
-
-
-  # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  Specify the authors of the library, with email addresses. Email addresses
-  #  of the authors are extracted from the SCM log. E.g. $ git log. CocoaPods also
-  #  accepts just a name if you'd rather not provide an email address.
-  #
-  #  Specify a social_media_url where others can refer to, for example a twitter
-  #  profile URL.
-  #
 
   s.author             = { "Alexandre Joly" => "alexandre.joly@kilokilo.ch" }
   s.social_media_url   = "http://twitter.com/jolyAlexandre"
 
   s.platform     = :ios, "8.1"
 
-  s.source       = { :git => "https://github.com/KiloKilo/WorldMatrix.git", :commit => "352214e479732cbee844e58398f3f4de1ecdc5c1" }
+  s.source       = { :git => "https://github.com/KiloKilo/WorldMatrix.git", :commit => "bb0cc75aa3563feff1eed99d7e3966050ddf6184" }
+  s.requires_arc = true
 
+  s.default_subspec = 'Base'
 
-  # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  CocoaPods is smart about how it includes source code. For source files
-  #  giving a folder will include any swift, h, m, mm, c & cpp files.
-  #  For header files it will include any header in the folder.
-  #  Not including the public_header_files will make all headers public.
-  #
+  s.subspec 'Base' do |ss|
+    ss.source_files = 'WorldMatrix/Matrix.swift', 'WorldMatrix/WorldMatrixView.swift'
+  end
 
-  s.source_files  = "Classes", "Classes/**/*.{h,m}"
-  s.exclude_files = "Classes/Exclude"
-
-  # s.public_header_files = "Classes/**/*.h"
-
-
-  # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  A list of resources included with the Pod. These are copied into the
-  #  target bundle with a build phase script. Anything else will be cleaned.
-  #  You can preserve files from being cleaned, please don't preserve
-  #  non-essential files like tests, examples and documentation.
-  #
-
-  # s.resource  = "icon.png"
-  # s.resources = "Resources/*.png"
-
-  # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
-
-
-  # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  Link your library with frameworks, or libraries. Libraries do not include
-  #  the lib prefix of their name.
-  #
-
-  # s.framework  = "SomeFramework"
-  # s.frameworks = "SomeFramework", "AnotherFramework"
-
-  # s.library   = "iconv"
-  # s.libraries = "iconv", "xml2"
-
-
-  # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  If your library depends on compiler flags you can set them in the xcconfig hash
-  #  where they will only apply to your library. If you depend on other Podspecs
-  #  you can include multiple dependencies to ensure it works.
-
-  # s.requires_arc = true
-
-  # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  # s.dependency "JSONKit", "~> 1.4"
+  s.subspec 'Generator' do |ss|
+    ss.source_files = 'WorldMatrix/WorldMatrixGenerator.swift'
+    ss.dependency 'WorldMatrix/Base'
+  end
 
 end
