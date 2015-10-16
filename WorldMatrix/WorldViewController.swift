@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 class WorldViewController: UIViewController {
 
@@ -20,6 +21,24 @@ class WorldViewController: UIViewController {
 
         let matrix = Matrix<WorldCharacteristic>(columns: 100, array: worldArray)
         worldMatrixView.mapMatrix = matrix
+//        worldMatrixView.mapCutting = MapCutting.Custom(north: 82.4, west: -179.99, south: -60, east: 180)
+        worldMatrixView.mapCutting = MapCutting.World
+
+        let newYork = CLLocationCoordinate2DMake(40.730610, -73.935242)
+        worldMatrixView.setCharacteristic(.Marker, forCoordinate: newYork)
+
+        let zurich = CLLocationCoordinate2DMake(47.367347, 8.5500025)
+        worldMatrixView.setCharacteristic(.Marker, forCoordinate: zurich)
+
+        let sydney = CLLocationCoordinate2DMake(-33.865143, 151.209900)
+        worldMatrixView.setCharacteristic(.Marker, forCoordinate: sydney)
+
+        let havana = CLLocationCoordinate2DMake(23.1333333333, -82.3833333333)
+        worldMatrixView.setCharacteristic(.Marker, forCoordinate: havana)
+
+        let rome = CLLocationCoordinate2DMake(41.9, 12.4833333)
+        worldMatrixView.setCharacteristic(.Marker, forCoordinate: rome)
+
     }
 
     func setupWorldArray() {

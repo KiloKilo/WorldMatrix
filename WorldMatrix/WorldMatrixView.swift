@@ -77,7 +77,7 @@ class WorldMatrixView: UIView {
     private var viewMatrix: Matrix<WorldDotView>?
 
     var matrixGap:CGFloat = 1.0
-    var mapCutting:MapCutting = .World
+    var mapCutting:MapCutting?
 
 
     private func createMatrixViews() {
@@ -124,8 +124,45 @@ class WorldMatrixView: UIView {
     }
 
     func setCharacteristic(characteristic:WorldCharacteristic, forCoordinate coordinate:CLLocationCoordinate2D) {
-        // TODO
+
+        guard let mapCutting = mapCutting else {
+            assertionFailure("mapCutting cannot be nil")
+            return
+        }
+
+        guard let viewMatrix = viewMatrix else {
+            assertionFailure("viewMatrix cannot be nil")
+            return
+        }
+
+
+        let bottomRightPoint = MKMapPointForCoordinate(mapCutting.boundingCoordinates().bottomRight)
+        let topLeftPoint = MKMapPointForCoordinate(mapCutting.boundingCoordinates().topLeft)
+
+        guard coordinate.latitude <= mapCutting.boundingCoordinates().topLeft.latitude &&
+                coordinate.latitude >= mapCutting.boundingCoordinates().bottomRight.latitude &&
+        coordinate.longitude >= mapCutting.boundingCoordinates().topLeft.longitude &&
+            coordinate.longitude <= mapCutting.boundingCoordinates().bottomRight.longitude else {
+                assertionFailure("coordinate must be within your map cutting")
+                return
+        }
+
+
+        var width:Double = bottomRightPoint.x - topLeftPoint.x
+
+        if topLeftPoint.x > bottomRightPoint.x {
+            width += MKMapPointForCoordinate(CLLocationCoordinate2DMake(mapCutting.boundingCoordinates().topLeft.latitude, 180)).x
+        }
+
+        let matrixFieldSize = Double(width) / Double(viewMatrix.columns)
+
+        let pointToChange = MKMapPointForCoordinate(coordinate)
+        let columnToChange = Int((pointToChange.x - topLeftPoint.x) / matrixFieldSize)
+        let rowToChange = Int((pointToChange.y - topLeftPoint.y) / matrixFieldSize)
+
+        viewMatrix[rowToChange, columnToChange].characteristic = characteristic
     }
+
 
     // MARK: - Default world dots
 

@@ -17,8 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
         let generator = WorldMatrixGenerator()
-        generator.columns = 20
-        generator.mapCutting = .SouthAmerica
+        generator.columns = 100
+        generator.mapCutting = MapCutting.Custom(north: 82.4, west: -179.99, south: -60, east: 180)
         generator.generate()
 
         return true
