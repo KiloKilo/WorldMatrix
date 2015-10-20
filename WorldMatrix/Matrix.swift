@@ -42,6 +42,10 @@ public struct Matrix<T> {
         }
     }
 
+    public func last() -> T? {
+        return grid.last
+    }
+
 }
 
 extension Matrix: CollectionType {
