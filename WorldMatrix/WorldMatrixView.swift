@@ -68,70 +68,160 @@ public enum MapCutting {
 
 public class WorldMatrixView: UIView {
 
+    // MARK: - Public
+
     public var mapMatrix: Matrix<WorldCharacteristic>? {
         didSet {
-            createMatrixViews()
-            setNeedsLayout()
+            createMatrixFrames()
+            saveMapPNGWithCpmpletionBlock(reloadMapImage)
         }
     }
-    private var viewMatrix: Matrix<WorldDotView>?
 
     public var matrixGap:CGFloat = 1.0
     public var mapCutting:MapCutting?
 
+    dynamic public var oceanColor: UIColor = UIColor.clearColor()
+    dynamic public var inlandWaterColor: UIColor = UIColor.whiteColor()
+    dynamic public var landColor: UIColor = UIColor.whiteColor()
+    dynamic public var markerColor: UIColor = UIColor.blackColor()
 
-    private func createMatrixViews() {
 
-        if viewMatrix?.count > 0 {
-            for (_, _, view) in viewMatrix! {
-                view.removeFromSuperview()
-            }
+    // MARK: - Private
+
+    private var dotMatrix: Matrix<CGRect>?
+
+    private var mapImageView: UIImageView
+
+    private let cachesURL = NSFileManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask).first!
+    var fileURL:NSURL {
+        get {
+            let scale = Int(UIScreen.mainScreen().scale)
+            var fileName = "MapMatrix"
+            if scale > 1 { fileName += "@\(scale)x" }
+            fileName += ".png"
+
+            return cachesURL.URLByAppendingPathComponent(fileName)
         }
+    }
 
-        guard let mapMatrix = mapMatrix else { return }
+    public override init(frame: CGRect) {
+        mapImageView = UIImageView()
 
-        viewMatrix = Matrix<WorldDotView>(rows: mapMatrix.rows, columns: mapMatrix.columns, repeatedValue: WorldDotView())
+        super.init(frame: frame)
 
-        for (row, column, worldCharacteristic) in mapMatrix {
+        self.addSubview(mapImageView)
 
-            let view = WorldDotView()
-            viewMatrix![row, column] = view
-            view.characteristic = worldCharacteristic
+    }
 
-            self.addSubview(view)
+    required public init?(coder aDecoder: NSCoder) {
+        mapImageView = UIImageView()
 
-        }
+        super.init(coder: aDecoder)
 
+        self.addSubview(mapImageView)
     }
 
     override public func layoutSubviews() {
         super.layoutSubviews()
 
-        guard let viewMatrix = viewMatrix else { return }
+        mapImageView.backgroundColor = UIColor.clearColor()
+        mapImageView.frame = self.bounds
+        mapImageView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        mapImageView.contentMode = .ScaleAspectFit
 
-        let dotSize:CGFloat = min(CGRectGetHeight(self.frame), CGRectGetWidth(self.frame)) / CGFloat(viewMatrix.columns) - matrixGap
+        reloadMapImage()
 
-        for (row, column, view) in viewMatrix {
+    }
+
+    private func reloadMapImage() {
+        if NSFileManager().fileExistsAtPath(fileURL.path!) {
+            dispatch_async(dispatch_get_main_queue()) {
+                self.mapImageView.image = UIImage(contentsOfFile: self.fileURL.path!)
+            }
+        }
+    }
+
+
+    private func saveMapPNGWithCpmpletionBlock(completionBlock: (() -> Void)) {
+        guard let dotMatrix = dotMatrix else { return }
+
+        let lastFrame = dotMatrix.last()!
+        let size = CGSizeMake(CGRectGetMaxX(lastFrame) + matrixGap, CGRectGetMaxY(lastFrame) + matrixGap)
+        let scale = UIScreen.mainScreen().scale
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+
+
+            UIGraphicsBeginImageContextWithOptions(size, false, scale)
+            let context = UIGraphicsGetCurrentContext()
+
+            defer { UIGraphicsEndImageContext() }
+
+            for (row, column, frame) in dotMatrix {
+                var color = UIColor.clearColor()
+
+                switch self.mapMatrix![row, column] {
+                case .Ocean:
+                    color = self.oceanColor
+                case .InlandWater:
+                    color = self.inlandWaterColor
+                case .Land:
+                    color = self.landColor
+                case .Marker:
+                    color = self.markerColor
+                default:
+                    color = UIColor.clearColor()
+
+                }
+                CGContextSetFillColorWithColor(context, color.CGColor)
+                CGContextFillEllipseInRect(context, frame)
+            }
+
+
+            do {
+                let mapImg = UIGraphicsGetImageFromCurrentImageContext()
+                let mapData = UIImagePNGRepresentation(mapImg)
+
+                try mapData!.writeToURL(self.fileURL, options: .AtomicWrite)
+
+                completionBlock()
+            } catch {
+                print(error)
+            }
+
+        })
+        
+    }
+    
+    private func createMatrixFrames() {
+        
+        guard let mapMatrix = mapMatrix else { return }
+
+        dotMatrix = Matrix<CGRect>(rows: mapMatrix.rows, columns: mapMatrix.columns, repeatedValue: CGRectZero)
+
+        let dotSize:CGFloat = CGRectGetWidth(self.frame) / CGFloat(mapMatrix.columns) - matrixGap
+
+        for (row, column, _) in mapMatrix {
+
             var frame = CGRectZero
             frame.origin.x = CGFloat(column) * (dotSize + matrixGap)
             frame.origin.y = CGFloat(row) * (dotSize + matrixGap)
             frame.size.width = dotSize
             frame.size.height = dotSize
 
-            view.frame = frame
+            dotMatrix![row, column] = frame
         }
 
     }
 
-    func setCharacteristic(characteristic:WorldCharacteristic, forCoordinate coordinate:CLLocationCoordinate2D) {
-
+    public func setCharacteristic(characteristic:WorldCharacteristic, forCoordinates coordinates:[CLLocationCoordinate2D]) {
         guard let mapCutting = mapCutting else {
             assertionFailure("mapCutting cannot be nil")
             return
         }
 
-        guard let viewMatrix = viewMatrix else {
-            assertionFailure("viewMatrix cannot be nil")
+        guard let mapMatrix = mapMatrix else {
+            assertionFailure("mapMatrix cannot be nil")
             return
         }
 
@@ -139,55 +229,37 @@ public class WorldMatrixView: UIView {
         let bottomRightPoint = MKMapPointForCoordinate(mapCutting.boundingCoordinates().bottomRight)
         let topLeftPoint = MKMapPointForCoordinate(mapCutting.boundingCoordinates().topLeft)
 
-        guard coordinate.latitude <= mapCutting.boundingCoordinates().topLeft.latitude &&
+        for coordinate in coordinates {
+
+            guard coordinate.latitude <= mapCutting.boundingCoordinates().topLeft.latitude &&
                 coordinate.latitude >= mapCutting.boundingCoordinates().bottomRight.latitude &&
-        coordinate.longitude >= mapCutting.boundingCoordinates().topLeft.longitude &&
-            coordinate.longitude <= mapCutting.boundingCoordinates().bottomRight.longitude else {
-                assertionFailure("coordinate must be within your map cutting")
-                return
+                coordinate.longitude >= mapCutting.boundingCoordinates().topLeft.longitude &&
+                coordinate.longitude <= mapCutting.boundingCoordinates().bottomRight.longitude else {
+                    assertionFailure("coordinate must be within your map cutting")
+                    return
+            }
+
+            var width:Double = bottomRightPoint.x - topLeftPoint.x
+
+            if topLeftPoint.x > bottomRightPoint.x {
+                width += MKMapPointForCoordinate(CLLocationCoordinate2DMake(mapCutting.boundingCoordinates().topLeft.latitude, 180)).x
+            }
+
+            let matrixFieldSize = Double(width) / Double(mapMatrix.columns)
+
+            let pointToChange = MKMapPointForCoordinate(coordinate)
+            let columnToChange = Int((pointToChange.x - topLeftPoint.x) / matrixFieldSize)
+            let rowToChange = Int((pointToChange.y - topLeftPoint.y) / matrixFieldSize)
+            
+            self.mapMatrix![rowToChange, columnToChange] = characteristic
         }
 
+        saveMapPNGWithCpmpletionBlock(reloadMapImage)
 
-        var width:Double = bottomRightPoint.x - topLeftPoint.x
-
-        if topLeftPoint.x > bottomRightPoint.x {
-            width += MKMapPointForCoordinate(CLLocationCoordinate2DMake(mapCutting.boundingCoordinates().topLeft.latitude, 180)).x
-        }
-
-        let matrixFieldSize = Double(width) / Double(viewMatrix.columns)
-
-        let pointToChange = MKMapPointForCoordinate(coordinate)
-        let columnToChange = Int((pointToChange.x - topLeftPoint.x) / matrixFieldSize)
-        let rowToChange = Int((pointToChange.y - topLeftPoint.y) / matrixFieldSize)
-
-        viewMatrix[rowToChange, columnToChange].characteristic = characteristic
     }
 
-
-    // MARK: - Default world dots
-
-    class WorldDotView: UIView {
-        var characteristic: WorldCharacteristic = .Ocean {
-            didSet {
-                setNeedsLayout()
-            }
-        }
-
-        override func layoutSubviews() {
-            self.layer.cornerRadius = CGRectGetHeight(self.frame) / 2.0
-
-            switch characteristic {
-            case .Ocean:
-                self.backgroundColor = UIColor.clearColor()
-            case .Land, .InlandWater:
-                self.backgroundColor = UIColor.whiteColor()
-            case .Marker:
-                self.backgroundColor = UIColor.blackColor()
-            default:
-                self.backgroundColor = UIColor.clearColor()
-            }
-
-        }
+    public func setCharacteristic(characteristic:WorldCharacteristic, forCoordinate coordinate:CLLocationCoordinate2D) {
+        setCharacteristic(characteristic, forCoordinates: [coordinate])
     }
 
 }
