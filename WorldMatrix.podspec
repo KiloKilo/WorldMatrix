@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "WorldMatrix"
-  s.version      = "0.0.1"
+  s.version      = "1.0.0"
   s.summary      = "create a view with a dotted world map in Swift 2.0"
 
   # This description is used to generate tags and improve search results.
@@ -22,7 +22,8 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, "8.1"
 
-  s.source       = { :git => "https://github.com/KiloKilo/WorldMatrix.git", :commit => "bb0cc75aa3563feff1eed99d7e3966050ddf6184" }
+  # s.source       = { :git => "https://github.com/KiloKilo/WorldMatrix.git", :commit => "bb0cc75aa3563feff1eed99d7e3966050ddf6184" }
+  s.source       = { :git => "https://github.com/KiloKilo/WorldMatrix.git", :tag => s.version.to_s }
   s.requires_arc = true
 
   s.default_subspec = 'Base'
