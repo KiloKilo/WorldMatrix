@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "8.1"
 
   # s.source       = { :git => "https://github.com/KiloKilo/WorldMatrix.git", :commit => "bb0cc75aa3563feff1eed99d7e3966050ddf6184" }
-  s.source       = { :git => "https://github.com/KiloKilo/WorldMatrix.git", :tag => s.version.to_s }
+  s.source       = { :git => "git@git.kilokilo.ch:kilokilo/WorldMatrix.git", :tag => s.version.to_s }
   s.requires_arc = true
 
   s.default_subspec = 'Base'
