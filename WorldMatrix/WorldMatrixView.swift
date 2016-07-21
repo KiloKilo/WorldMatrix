@@ -190,11 +190,11 @@ public class WorldMatrixView: UIView {
             }
 
         })
-        
+
     }
-    
+
     private func createMatrixFrames() {
-        
+
         guard let mapMatrix = mapMatrix else { return }
 
         dotMatrix = Matrix<CGRect>(rows: mapMatrix.rows, columns: mapMatrix.columns, repeatedValue: CGRectZero)
@@ -228,6 +228,7 @@ public class WorldMatrixView: UIView {
 
         let bottomRightPoint = MKMapPointForCoordinate(mapCutting.boundingCoordinates().bottomRight)
         let topLeftPoint = MKMapPointForCoordinate(mapCutting.boundingCoordinates().topLeft)
+        var newMapMatrix = mapMatrix
 
         for coordinate in coordinates {
 
@@ -250,9 +251,11 @@ public class WorldMatrixView: UIView {
             let pointToChange = MKMapPointForCoordinate(coordinate)
             let columnToChange = Int((pointToChange.x - topLeftPoint.x) / matrixFieldSize)
             let rowToChange = Int((pointToChange.y - topLeftPoint.y) / matrixFieldSize)
-            
-            self.mapMatrix![rowToChange, columnToChange] = characteristic
+
+            newMapMatrix[rowToChange, columnToChange] = characteristic
         }
+
+        self.mapMatrix = newMapMatrix
 
         saveMapPNGWithCpmpletionBlock(reloadMapImage)
 
