@@ -4,7 +4,7 @@
 [![Cocoapods Platform](https://img.shields.io/cocoapods/p/WorldMatrix.svg)](https://github.com/KiloKilo/WorldMatrix)
 [![Analytics](https://ga-beacon.appspot.com/UA-63588420-2/WorldMatrix)](https://github.com/KiloKilo/WorldMatrix)
 
-`WorldMatrix` is an iOS library writen in Swift 2 which allows you to draw a map with dots.
+`WorldMatrix` is an iOS library writen in Swift 3 which allows you to draw a map with dots.
 
 ![Screenshot](https://raw.github.com/KiloKilo/WorldMatrix/master/screenshot.png)
 
@@ -13,7 +13,7 @@
 The easiest way to install `WorldMatrix` is using [CocoaPods](http://cocoapods.org/). Add the following dependency to your `Podfile` and run the `pod install` command via command line:
 
 ```bash
-pod 'WorldMatrix', '~> 1.0.0'
+pod 'WorldMatrix', '~> 3.0.0'
 ```
 
 ## Usage
@@ -32,7 +32,7 @@ let matrix = Matrix<WorldCharacteristic>(columns: 100, array: worldArray)
 Add the generator to your `Podfile`
 
 ```bash
-pod 'WorldMatrix/Generator', '~> 1.0.0'
+pod 'WorldMatrix/Generator', '~> 3.0.0'
 ```
 
 Generate a Matrix with you desired cutting
