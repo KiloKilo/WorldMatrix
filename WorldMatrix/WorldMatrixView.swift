@@ -10,23 +10,23 @@ import UIKit
 import MapKit
 
 public enum WorldCharacteristic: CustomStringConvertible {
-    case Land
-    case Ocean
-    case InlandWater
-    case Marker
-    case Unknown
+    case land
+    case ocean
+    case inlandWater
+    case marker
+    case unknown
 
     public var description: String {
         switch self {
-        case Land:
+        case .land:
             return "🔶"
-        case Ocean:
+        case .ocean:
             return "🔵"
-        case InlandWater:
+        case .inlandWater:
             return "🔹"
-        case Marker:
+        case .marker:
             return "⚫️"
-        case Unknown:
+        case .unknown:
             return "✖️"
         }
     }
@@ -35,29 +35,29 @@ public enum WorldCharacteristic: CustomStringConvertible {
 typealias BoundingBox = (topLeft: CLLocationCoordinate2D, bottomRight: CLLocationCoordinate2D)
 
 public enum MapCutting {
-    case World //85.0,-180.0,-85.0,180.0
-    case Europe //82.7,-28.0,33.9,74.1
-    case Africa //37.96,-26.59,-37.53,60.56
-    case NorthAmerica //85.42,177.15,5.57,-4.05
-    case SouthAmerica //13.08,-93.98,-56.55,-32.59
-    case Australia //-9.22,112.92,-54.78,159.26
-    case Custom(north:Double, west:Double, south:Double, east:Double)
+    case world //85.0,-180.0,-85.0,180.0
+    case europe //82.7,-28.0,33.9,74.1
+    case africa //37.96,-26.59,-37.53,60.56
+    case northAmerica //85.42,177.15,5.57,-4.05
+    case southAmerica //13.08,-93.98,-56.55,-32.59
+    case australia //-9.22,112.92,-54.78,159.26
+    case custom(north:Double, west:Double, south:Double, east:Double)
 
     func boundingCoordinates() -> BoundingBox {
         switch self {
-        case World:
-            return MapCutting.Custom(north: 85, west: -179.99, south: -85, east: 180).boundingCoordinates()
-        case Europe:
-            return MapCutting.Custom(north: 82.7, west: -28.0, south: 33.9, east: 74.1).boundingCoordinates()
-        case Africa:
-            return MapCutting.Custom(north: 37.96, west: -26.59, south: -37.53, east: 60.56).boundingCoordinates()
-        case NorthAmerica:
-            return MapCutting.Custom(north: 85.42, west: 177.15, south: 5.57, east: -4.05).boundingCoordinates()
-        case SouthAmerica:
-            return MapCutting.Custom(north: 13.08, west: -93.98, south: -56.55, east: -32.59).boundingCoordinates()
-        case Australia:
-            return MapCutting.Custom(north: -9.22, west: 112.92, south: -54.78, east: 159.26).boundingCoordinates()
-        case Custom(let north, let west, let south, let east):
+        case .world:
+            return MapCutting.custom(north: 85, west: -179.99, south: -85, east: 180).boundingCoordinates()
+        case .europe:
+            return MapCutting.custom(north: 82.7, west: -28.0, south: 33.9, east: 74.1).boundingCoordinates()
+        case .africa:
+            return MapCutting.custom(north: 37.96, west: -26.59, south: -37.53, east: 60.56).boundingCoordinates()
+        case .northAmerica:
+            return MapCutting.custom(north: 85.42, west: 177.15, south: 5.57, east: -4.05).boundingCoordinates()
+        case .southAmerica:
+            return MapCutting.custom(north: 13.08, west: -93.98, south: -56.55, east: -32.59).boundingCoordinates()
+        case .australia:
+            return MapCutting.custom(north: -9.22, west: 112.92, south: -54.78, east: 159.26).boundingCoordinates()
+        case .custom(let north, let west, let south, let east):
             return (CLLocationCoordinate2DMake(north, west), CLLocationCoordinate2DMake(south, east))
         }
 
@@ -66,41 +66,41 @@ public enum MapCutting {
 }
 
 
-public class WorldMatrixView: UIView {
+open class WorldMatrixView: UIView {
 
     // MARK: - Public
 
-    public var mapMatrix: Matrix<WorldCharacteristic>? {
+    open var mapMatrix: Matrix<WorldCharacteristic>? {
         didSet {
             createMatrixFrames()
             saveMapPNGWithCpmpletionBlock(reloadMapImage)
         }
     }
 
-    public var matrixGap:CGFloat = 1.0
-    public var mapCutting:MapCutting?
+    open var matrixGap:CGFloat = 1.0
+    open var mapCutting:MapCutting?
 
-    dynamic public var oceanColor: UIColor = UIColor.clearColor()
-    dynamic public var inlandWaterColor: UIColor = UIColor.whiteColor()
-    dynamic public var landColor: UIColor = UIColor.whiteColor()
-    dynamic public var markerColor: UIColor = UIColor.blackColor()
+    dynamic open var oceanColor: UIColor = UIColor.clear
+    dynamic open var inlandWaterColor: UIColor = UIColor.white
+    dynamic open var landColor: UIColor = UIColor.white
+    dynamic open var markerColor: UIColor = UIColor.black
 
 
     // MARK: - Private
 
-    private var dotMatrix: Matrix<CGRect>?
+    fileprivate var dotMatrix: Matrix<CGRect>?
 
-    private var mapImageView: UIImageView
+    fileprivate var mapImageView: UIImageView
 
-    private let cachesURL = NSFileManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask).first!
-    var fileURL:NSURL {
+    fileprivate let cachesURL = FileManager().urls(for: .cachesDirectory, in: .userDomainMask).first!
+    var fileURL:URL {
         get {
-            let scale = Int(UIScreen.mainScreen().scale)
+            let scale = Int(UIScreen.main.scale)
             var fileName = "MapMatrix"
             if scale > 1 { fileName += "@\(scale)x" }
             fileName += ".png"
 
-            return cachesURL.URLByAppendingPathComponent(fileName)
+            return cachesURL.appendingPathComponent(fileName)
         }
     }
 
@@ -121,68 +121,67 @@ public class WorldMatrixView: UIView {
         self.addSubview(mapImageView)
     }
 
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
 
-        mapImageView.backgroundColor = UIColor.clearColor()
+        mapImageView.backgroundColor = UIColor.clear
         mapImageView.frame = self.bounds
-        mapImageView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        mapImageView.contentMode = .ScaleAspectFit
+        mapImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        mapImageView.contentMode = .scaleAspectFit
 
         reloadMapImage()
 
     }
 
-    private func reloadMapImage() {
-        if NSFileManager().fileExistsAtPath(fileURL.path!) {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.mapImageView.image = UIImage(contentsOfFile: self.fileURL.path!)
+    fileprivate func reloadMapImage() {
+        if FileManager().fileExists(atPath: fileURL.path) {
+            DispatchQueue.main.async {
+                self.mapImageView.image = UIImage(contentsOfFile: self.fileURL.path)
             }
         }
     }
 
 
-    private func saveMapPNGWithCpmpletionBlock(completionBlock: (() -> Void)) {
+    fileprivate func saveMapPNGWithCpmpletionBlock(_ completionBlock: @escaping (() -> Void)) {
         guard let dotMatrix = dotMatrix else { return }
 
         let lastFrame = dotMatrix.last()!
-        let size = CGSizeMake(CGRectGetMaxX(lastFrame) + matrixGap, CGRectGetMaxY(lastFrame) + matrixGap)
-        let scale = UIScreen.mainScreen().scale
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-
+        let size = CGSize(width: lastFrame.maxX + matrixGap, height: lastFrame.maxY + matrixGap)
+        let scale = UIScreen.main.scale
+        
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async(execute: {
 
             UIGraphicsBeginImageContextWithOptions(size, false, scale)
-            let context = UIGraphicsGetCurrentContext()
+            let context = UIGraphicsGetCurrentContext()!
 
             defer { UIGraphicsEndImageContext() }
 
             for (row, column, frame) in dotMatrix {
-                var color = UIColor.clearColor()
+                var color = UIColor.clear
 
                 switch self.mapMatrix![row, column] {
-                case .Ocean:
+                case .ocean:
                     color = self.oceanColor
-                case .InlandWater:
+                case .inlandWater:
                     color = self.inlandWaterColor
-                case .Land:
+                case .land:
                     color = self.landColor
-                case .Marker:
+                case .marker:
                     color = self.markerColor
                 default:
-                    color = UIColor.clearColor()
+                    color = UIColor.clear
 
                 }
-                CGContextSetFillColorWithColor(context, color.CGColor)
-                CGContextFillEllipseInRect(context, frame)
+                context.setFillColor(color.cgColor)
+                context.fillEllipse(in: frame)
             }
 
 
             do {
                 let mapImg = UIGraphicsGetImageFromCurrentImageContext()
-                let mapData = UIImagePNGRepresentation(mapImg)
+                let mapData = UIImagePNGRepresentation(mapImg!)
 
-                try mapData!.writeToURL(self.fileURL, options: .AtomicWrite)
+                try mapData!.write(to: self.fileURL, options: .atomicWrite)
 
                 completionBlock()
             } catch {
@@ -193,17 +192,17 @@ public class WorldMatrixView: UIView {
 
     }
 
-    private func createMatrixFrames() {
+    fileprivate func createMatrixFrames() {
 
         guard let mapMatrix = mapMatrix else { return }
 
-        dotMatrix = Matrix<CGRect>(rows: mapMatrix.rows, columns: mapMatrix.columns, repeatedValue: CGRectZero)
+        dotMatrix = Matrix<CGRect>(rows: mapMatrix.rows, columns: mapMatrix.columns, repeatedValue: CGRect.zero)
 
-        let dotSize:CGFloat = CGRectGetWidth(self.frame) / CGFloat(mapMatrix.columns) - matrixGap
+        let dotSize:CGFloat = self.frame.width / CGFloat(mapMatrix.columns) - matrixGap
 
         for (row, column, _) in mapMatrix {
 
-            var frame = CGRectZero
+            var frame = CGRect.zero
             frame.origin.x = CGFloat(column) * (dotSize + matrixGap)
             frame.origin.y = CGFloat(row) * (dotSize + matrixGap)
             frame.size.width = dotSize
@@ -214,7 +213,7 @@ public class WorldMatrixView: UIView {
 
     }
 
-    public func setCharacteristic(characteristic:WorldCharacteristic, forCoordinates coordinates:[CLLocationCoordinate2D]) {
+    open func setCharacteristic(_ characteristic:WorldCharacteristic, forCoordinates coordinates:[CLLocationCoordinate2D]) {
         guard let mapCutting = mapCutting else {
             assertionFailure("mapCutting cannot be nil")
             return
@@ -261,7 +260,7 @@ public class WorldMatrixView: UIView {
 
     }
 
-    public func setCharacteristic(characteristic:WorldCharacteristic, forCoordinate coordinate:CLLocationCoordinate2D) {
+    open func setCharacteristic(_ characteristic:WorldCharacteristic, forCoordinate coordinate:CLLocationCoordinate2D) {
         setCharacteristic(characteristic, forCoordinates: [coordinate])
     }
 
