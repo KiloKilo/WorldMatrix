@@ -78,7 +78,7 @@ open class WorldMatrixGenerator: NSObject {
         for (row, column, _) in mapMatrix! {
 
             // it looks like we cannot make more than 50 requests per minutes
-            // so we wait until the time is up, and thereby the number of errors
+            // so we wait until the time is up, and thereby reduce the number of errors
             if (row * column + column) % 51 == 1 {
                 let waitOperation = BlockOperation(block: { () -> Void in
                     sleep(10)
