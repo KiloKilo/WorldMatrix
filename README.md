@@ -54,6 +54,10 @@ generator.generate()
 ## Demo
 Clone this repository. Open the resulting xcode file. `Run` the the regarding build schema to start the demo app in the iPhone or iPad simulator.
 
+## TODO
+ - [x] update to Swift 3
+ - [ ] Handle reverse geo code errors
+ - [ ] generator should create a usefull output
 
 ## License
 
