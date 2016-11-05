@@ -14,7 +14,7 @@ public struct Matrix<T> {
     public init(rows: Int, columns: Int, repeatedValue: T) {
         self.rows = rows
         self.columns = columns
-        grid = Array<T>(count: rows * columns, repeatedValue: repeatedValue)
+        grid = Array<T>(repeating: repeatedValue, count: rows * columns)
     }
 
     public init(columns:Int, array:Array<T>) {
@@ -26,7 +26,7 @@ public struct Matrix<T> {
     }
 
 
-    public func indexIsValidForRow(row: Int, column: Int) -> Bool {
+    public func indexIsValidForRow(_ row: Int, column: Int) -> Bool {
         return row >= 0 && row < rows && column >= 0 && column < columns
     }
 
@@ -48,7 +48,8 @@ public struct Matrix<T> {
 
 }
 
-extension Matrix: CollectionType {
+extension Matrix: Collection {
+
     public typealias Index = Int
 
     public var startIndex: Index {
@@ -61,6 +62,15 @@ extension Matrix: CollectionType {
             return grid.count
         }
     }
+    
+    /// Returns the position immediately after the given index.
+    ///
+    /// - Parameter i: A valid index of the collection. `i` must be less than
+    ///   `endIndex`.
+    /// - Returns: The index value immediately after `i`.
+    public func index(after i: Int) -> Int {
+        return i + 1
+    }
 
     public subscript (_i: Index) -> (row:Int, column:Int, element:T) {
         get {
@@ -69,7 +79,7 @@ extension Matrix: CollectionType {
         }
     }
 
-    private func getRowColumnForIndex(index: Index) -> (row:Int, column:Int) {
+    fileprivate func getRowColumnForIndex(_ index: Index) -> (row:Int, column:Int) {
         let row:Int = index / columns
         let column:Int = index % columns
 
