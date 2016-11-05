@@ -43,9 +43,9 @@ let generator = WorldMatrixGenerator()
 // Set the number of columns per rows (Default: 100)
 generator.columns = 20
 
-// Set your desired map cutting (Default: .World)
-// use .Custom(north, east, south, west) for a custom bounding
-generator.mapCutting = .Europe
+// Set your desired map cutting (Default: .world)
+// use .custom(north, east, south, west) for a custom bounding
+generator.mapCutting = .europe
 
 // Generates the world array
 generator.generate()
@@ -61,7 +61,7 @@ Clone this repository. Open the resulting xcode file. `Run` the the regarding bu
 
 ## License
 
-Copyright (c) 2015 KiloKilo GmbH
+Copyright (c) 2016 KiloKilo GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
