@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "WorldMatrix"
-  s.version      = "3.0.0"
+  s.version      = "3.0.1"
   s.summary      = "create a view with a dotted world map in Swift 3.0"
 
   s.description  = <<-DESC
@@ -16,6 +16,7 @@ Pod::Spec.new do |s|
   s.social_media_url   = "http://twitter.com/jolyAlexandre"
 
   s.platform     = :ios, "8.1"
+  s.swift_version = '3.3'
 
   s.source       = { :git => "https://github.com/KiloKilo/WorldMatrix.git", :tag => s.version.to_s }
 

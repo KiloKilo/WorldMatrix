@@ -80,10 +80,10 @@ open class WorldMatrixView: UIView {
     open var matrixGap:CGFloat = 1.0
     open var mapCutting:MapCutting?
 
-    dynamic open var oceanColor: UIColor = UIColor.clear
-    dynamic open var inlandWaterColor: UIColor = UIColor.white
-    dynamic open var landColor: UIColor = UIColor.white
-    dynamic open var markerColor: UIColor = UIColor.black
+    @objc dynamic open var oceanColor: UIColor = UIColor.clear
+    @objc dynamic open var inlandWaterColor: UIColor = UIColor.white
+    @objc dynamic open var landColor: UIColor = UIColor.white
+    @objc dynamic open var markerColor: UIColor = UIColor.black
 
 
     // MARK: - Private
