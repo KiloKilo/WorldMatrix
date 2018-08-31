@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "WorldMatrix"
-  s.version      = "3.0.0"
+  s.version      = "3.0.1"
   s.summary      = "create a view with a dotted world map in Swift 3.0"
 
   s.description  = <<-DESC
