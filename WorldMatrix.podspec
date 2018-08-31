@@ -16,6 +16,7 @@ Pod::Spec.new do |s|
   s.social_media_url   = "http://twitter.com/jolyAlexandre"
 
   s.platform     = :ios, "8.1"
+  s.swift_version = '3.3'
 
   s.source       = { :git => "https://github.com/KiloKilo/WorldMatrix.git", :tag => s.version.to_s }
 
