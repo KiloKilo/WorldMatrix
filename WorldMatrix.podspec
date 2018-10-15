@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name         = "WorldMatrix"
-  s.version      = "3.0.1"
-  s.summary      = "create a view with a dotted world map in Swift 3.0"
+  s.version      = "4.2.0"
+  s.summary      = "create a view with a dotted world map in Swift 4.2"
 
   s.description  = <<-DESC
-                  `WorldMatrix` is an iOS library writen in Swift 3 which allows you to draw a map with dots.
+                  `WorldMatrix` is an iOS library writen in Swift 4.2 which allows you to draw a map with dots.
                    DESC
 
   s.homepage     = "https://github.com/KiloKilo/WorldMatrix"
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.social_media_url   = "http://twitter.com/jolyAlexandre"
 
   s.platform     = :ios, "8.1"
-  s.swift_version = '3.3'
+  s.swift_version = '4.2'
 
   s.source       = { :git => "https://github.com/KiloKilo/WorldMatrix.git", :tag => s.version.to_s }
 

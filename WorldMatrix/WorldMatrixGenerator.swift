@@ -27,13 +27,13 @@ open class WorldMatrixGenerator: NSObject {
 
     fileprivate var topLeftPoint:MKMapPoint {
         get {
-            return MKMapPointForCoordinate(mapCutting.boundingCoordinates().topLeft)
+            return MKMapPoint.init(mapCutting.boundingCoordinates().topLeft)
         }
     }
 
     fileprivate var bottomRightPoint:MKMapPoint {
         get {
-            return MKMapPointForCoordinate(mapCutting.boundingCoordinates().bottomRight)
+            return MKMapPoint.init(mapCutting.boundingCoordinates().bottomRight)
         }
     }
 
@@ -57,7 +57,7 @@ open class WorldMatrixGenerator: NSObject {
         let height = bottomRightPoint.y - topLeftPoint.y
 
         if topLeftPoint.x > bottomRightPoint.x {
-            width += MKMapPointForCoordinate(CLLocationCoordinate2DMake(mapCutting.boundingCoordinates().topLeft.latitude, 180)).x
+            width += MKMapPoint.init(CLLocationCoordinate2DMake(mapCutting.boundingCoordinates().topLeft.latitude, 180)).x
         }
 
 
@@ -88,8 +88,8 @@ open class WorldMatrixGenerator: NSObject {
             }
 
 
-            let mapPoint = MKMapPointMake(topLeftPoint.x + (Double(column) * matrixFieldSize) + (matrixFieldSize/2.0), topLeftPoint.y + (Double(row) * matrixFieldSize) + (matrixFieldSize/2.0))
-            let coordinate = MKCoordinateForMapPoint(mapPoint)
+            let mapPoint = MKMapPoint.init(x: topLeftPoint.x + (Double(column) * matrixFieldSize) + (matrixFieldSize/2.0), y: topLeftPoint.y + (Double(row) * matrixFieldSize) + (matrixFieldSize/2.0))
+            let coordinate = mapPoint.coordinate
 
             let op = ReverseGeoCodeOperation(location: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude), completionHandler: { (placemarks, error) -> Void in
 
