@@ -105,7 +105,7 @@
 				TargetAttributes = {
 					B18CAA751BCC044200B3FCE1 = {
 						CreatedOnToolsVersion = 7.0.1;
-						LastSwiftMigration = 0810;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -276,7 +276,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ch.kilokilo.worldMatrix;
 				PRODUCT_NAME = WorldMatrix;
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -291,7 +292,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ch.kilokilo.worldMatrix;
 				PRODUCT_NAME = WorldMatrix;
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

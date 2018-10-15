@@ -179,7 +179,7 @@ open class WorldMatrixView: UIView {
 
             do {
                 let mapImg = UIGraphicsGetImageFromCurrentImageContext()
-                let mapData = UIImagePNGRepresentation(mapImg!)
+                let mapData = mapImg!.pngData()
 
                 try mapData!.write(to: self.fileURL, options: .atomicWrite)
 
@@ -225,8 +225,8 @@ open class WorldMatrixView: UIView {
         }
 
 
-        let bottomRightPoint = MKMapPointForCoordinate(mapCutting.boundingCoordinates().bottomRight)
-        let topLeftPoint = MKMapPointForCoordinate(mapCutting.boundingCoordinates().topLeft)
+        let bottomRightPoint = MKMapPoint.init(mapCutting.boundingCoordinates().bottomRight)
+        let topLeftPoint = MKMapPoint.init(mapCutting.boundingCoordinates().topLeft)
         var newMapMatrix = mapMatrix
 
         for coordinate in coordinates {
@@ -242,12 +242,12 @@ open class WorldMatrixView: UIView {
             var width:Double = bottomRightPoint.x - topLeftPoint.x
 
             if topLeftPoint.x > bottomRightPoint.x {
-                width += MKMapPointForCoordinate(CLLocationCoordinate2DMake(mapCutting.boundingCoordinates().topLeft.latitude, 180)).x
+                width += MKMapPoint.init(CLLocationCoordinate2DMake(mapCutting.boundingCoordinates().topLeft.latitude, 180)).x
             }
 
             let matrixFieldSize = Double(width) / Double(mapMatrix.columns)
 
-            let pointToChange = MKMapPointForCoordinate(coordinate)
+            let pointToChange = MKMapPoint.init(coordinate)
             let columnToChange = Int((pointToChange.x - topLeftPoint.x) / matrixFieldSize)
             let rowToChange = Int((pointToChange.y - topLeftPoint.y) / matrixFieldSize)
 
