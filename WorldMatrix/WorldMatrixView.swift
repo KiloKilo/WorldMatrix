@@ -73,7 +73,7 @@ open class WorldMatrixView: UIView {
     open var mapMatrix: Matrix<WorldCharacteristic>? {
         didSet {
             createMatrixFrames()
-            saveMapPNGWithCpmpletionBlock(reloadMapImage)
+            saveMapPNGWithCompletionBlock(reloadMapImage)
         }
     }
 
@@ -142,7 +142,7 @@ open class WorldMatrixView: UIView {
     }
 
 
-    fileprivate func saveMapPNGWithCpmpletionBlock(_ completionBlock: @escaping (() -> Void)) {
+    fileprivate func saveMapPNGWithCompletionBlock(_ completionBlock: @escaping (() -> Void)) {
         guard let dotMatrix = dotMatrix else { return }
 
         let lastFrame = dotMatrix.last()!
