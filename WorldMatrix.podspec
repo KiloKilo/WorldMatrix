@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/KiloKilo/WorldMatrix"
   s.screenshots  = "https://raw.github.com/KiloKilo/WorldMatrix/master/screenshot.png"
 
-  s.license      = { :type => "MIT", :file => "LICENSE" }
+  s.license      = { :type => "MIT", :file => "LICENSE.md" }
 
   s.author             = { "Alexandre Joly" => "alexandre.joly@kilokilo.ch" }
   s.social_media_url   = "http://twitter.com/jolyAlexandre"
