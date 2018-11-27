@@ -255,9 +255,6 @@ open class WorldMatrixView: UIView {
         }
 
         self.mapMatrix = newMapMatrix
-
-        saveMapPNGWithCpmpletionBlock(reloadMapImage)
-
     }
 
     open func setCharacteristic(_ characteristic:WorldCharacteristic, forCoordinate coordinate:CLLocationCoordinate2D) {
