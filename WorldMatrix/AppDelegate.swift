@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let generator = WorldMatrixGenerator()
         generator.columns = 100
         generator.mapCutting = MapCutting.custom(north: 82.4, west: -179.99, south: -60, east: 180)
+        generator.exportType = .enum
         generator.generate()
 
         return true

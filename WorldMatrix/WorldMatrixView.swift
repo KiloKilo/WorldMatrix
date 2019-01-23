@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-public enum WorldCharacteristic: CustomStringConvertible {
+public enum WorldCharacteristic: String, CustomStringConvertible {
     case land
     case ocean
     case inlandWater
@@ -17,6 +17,10 @@ public enum WorldCharacteristic: CustomStringConvertible {
     case unknown
 
     public var description: String {
+        return self.rawValue
+    }
+    
+    func emoji() -> String {
         switch self {
         case .land:
             return "🔶"
@@ -30,6 +34,23 @@ public enum WorldCharacteristic: CustomStringConvertible {
             return "✖️"
         }
     }
+    
+    
+    func ascii() -> String {
+        switch self {
+        case .land:
+            return "."
+        case .ocean:
+            return "~"
+        case .inlandWater:
+            return "-"
+        case .marker:
+            return "o"
+        case .unknown:
+            return "x"
+        }
+    }
+
 }
 
 typealias BoundingBox = (topLeft: CLLocationCoordinate2D, bottomRight: CLLocationCoordinate2D)
