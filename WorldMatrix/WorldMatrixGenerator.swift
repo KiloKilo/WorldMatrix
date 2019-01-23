@@ -138,7 +138,7 @@ open class WorldMatrixGenerator: NSObject {
                 print("\tmapMatrix += [", separator: "", terminator: "")
             }
 
-            print("\(cell)", separator: "", terminator: "")
+            print(".\(cell)", separator: "", terminator: "")
 
             if column < (self.mapMatrix!.columns - 1) {
                 print(",", separator: "", terminator: "")
