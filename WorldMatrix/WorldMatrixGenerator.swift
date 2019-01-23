@@ -9,6 +9,12 @@
 import UIKit
 import MapKit
 
+public enum ExportType {
+    case `enum`
+    case ascii
+    case emoji
+}
+
 open class WorldMatrixGenerator: NSObject {
 
     open var columns:Int = 100 {
@@ -40,6 +46,8 @@ open class WorldMatrixGenerator: NSObject {
     fileprivate var matrixFieldSize: Double = 100
 
     fileprivate var mapMatrix: Matrix<WorldCharacteristic>?
+
+    open var exportType: ExportType = .enum
 
 
     let queue = OperationQueue()
@@ -128,7 +136,7 @@ open class WorldMatrixGenerator: NSObject {
 
     }
 
-    open func export() {
+    fileprivate func export() {
         print("")
         print("var mapMatrix = []")
 
@@ -138,8 +146,15 @@ open class WorldMatrixGenerator: NSObject {
                 print("\tmapMatrix += [", separator: "", terminator: "")
             }
 
-            print(".\(cell)", separator: "", terminator: "")
-
+            switch self.exportType {
+            case .enum:
+                print(".\(cell)", separator: "", terminator: "")
+            case .ascii:
+                print(cell.ascii(), separator: "", terminator: "")
+            case .emoji:
+                print(cell.emoji(), separator: "", terminator: "")
+            }
+            
             if column < (self.mapMatrix!.columns - 1) {
                 print(",", separator: "", terminator: "")
             } else if column == (self.mapMatrix!.columns - 1) {
