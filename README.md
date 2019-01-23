@@ -9,7 +9,9 @@
 ![Screenshot](https://raw.github.com/KiloKilo/WorldMatrix/master/screenshot.png)
 
 ## Installation
+
 ### CocoaPods
+
 The easiest way to install `WorldMatrix` is using [CocoaPods](http://cocoapods.org/). Add the following dependency to your `Podfile` and run the `pod install` command via command line:
 
 ```bash
@@ -17,7 +19,6 @@ pod 'WorldMatrix', '~> 4.2.0'
 ```
 
 ## Usage
-
 
 ```swift
 // worldArray can be generated with the generator (see `Generate a map)
@@ -29,6 +30,7 @@ let matrix = Matrix<WorldCharacteristic>(columns: 100, array: worldArray)
 ```
 
 ### Generate a map
+
 Add the generator to your `Podfile`
 
 ```bash
@@ -47,16 +49,20 @@ generator.columns = 20
 // use .custom(north, east, south, west) for a custom bounding
 generator.mapCutting = .europe
 
+// Set the output type (.enum, .ascii, .emoji) (Default: .enum)
+generator.exportType = .enum
+
 // Generates the world array
 generator.generate()
 ```
 
 ## Demo
+
 Clone this repository. Open the resulting xcode file. `Run` the the regarding build schema to start the demo app in the iPhone or iPad simulator.
 
 ## TODO
- - [ ] Handle reverse geo code errors
- - [ ] generator should create a usefull output
+
+-   [ ] Handle reverse geo code errors
 
 ## License
 
