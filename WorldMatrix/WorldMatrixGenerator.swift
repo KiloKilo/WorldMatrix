@@ -9,6 +9,12 @@
 import UIKit
 import MapKit
 
+public enum ExportType {
+    case `enum`
+    case ascii
+    case emoji
+}
+
 open class WorldMatrixGenerator: NSObject {
 
     open var columns:Int = 100 {
@@ -40,6 +46,8 @@ open class WorldMatrixGenerator: NSObject {
     fileprivate var matrixFieldSize: Double = 100
 
     fileprivate var mapMatrix: Matrix<WorldCharacteristic>?
+
+    open var exportType: ExportType = .enum
 
 
     let queue = OperationQueue()
@@ -97,7 +105,7 @@ open class WorldMatrixGenerator: NSObject {
 
                 if let _ = error {
                     self.mapMatrix![row, column] = .unknown
-                    print("x", separator: "", terminator: "")
+                    print(self.mapMatrix![row, column].ascii(), separator: "", terminator: "")
 
                     // TODO: Redo the operation
                     sleep(10) //wait and try to minimize the errors
@@ -109,14 +117,13 @@ open class WorldMatrixGenerator: NSObject {
 
                 if placemarks[0].inlandWater != nil {
                     self.mapMatrix![row, column] = .inlandWater
-                    print("-", separator: "", terminator: "")
                 } else if placemarks[0].ocean != nil {
                     self.mapMatrix![row, column] = .ocean
-                    print("~", separator: "", terminator: "")
                 } else {
                     self.mapMatrix![row, column] = .land
-                    print(".", separator: "", terminator: "")
                 }
+                print(self.mapMatrix![row, column].ascii(), separator: "", terminator: "")
+
                 
             })
 
@@ -128,7 +135,7 @@ open class WorldMatrixGenerator: NSObject {
 
     }
 
-    open func export() {
+    fileprivate func export() {
         print("")
         print("var mapMatrix = []")
 
@@ -138,8 +145,15 @@ open class WorldMatrixGenerator: NSObject {
                 print("\tmapMatrix += [", separator: "", terminator: "")
             }
 
-            print("\(cell)", separator: "", terminator: "")
-
+            switch self.exportType {
+            case .enum:
+                print(".\(cell)", separator: "", terminator: "")
+            case .ascii:
+                print(cell.ascii(), separator: "", terminator: "")
+            case .emoji:
+                print(cell.emoji(), separator: "", terminator: "")
+            }
+            
             if column < (self.mapMatrix!.columns - 1) {
                 print(",", separator: "", terminator: "")
             } else if column == (self.mapMatrix!.columns - 1) {
