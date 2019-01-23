@@ -105,7 +105,7 @@ open class WorldMatrixGenerator: NSObject {
 
                 if let _ = error {
                     self.mapMatrix![row, column] = .unknown
-                    print("x", separator: "", terminator: "")
+                    print(self.mapMatrix![row, column].ascii(), separator: "", terminator: "")
 
                     // TODO: Redo the operation
                     sleep(10) //wait and try to minimize the errors
@@ -117,14 +117,13 @@ open class WorldMatrixGenerator: NSObject {
 
                 if placemarks[0].inlandWater != nil {
                     self.mapMatrix![row, column] = .inlandWater
-                    print("-", separator: "", terminator: "")
                 } else if placemarks[0].ocean != nil {
                     self.mapMatrix![row, column] = .ocean
-                    print("~", separator: "", terminator: "")
                 } else {
                     self.mapMatrix![row, column] = .land
-                    print(".", separator: "", terminator: "")
                 }
+                print(self.mapMatrix![row, column].ascii(), separator: "", terminator: "")
+
                 
             })
 
